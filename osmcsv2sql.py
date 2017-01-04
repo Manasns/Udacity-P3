@@ -1,7 +1,7 @@
 """
 Build database of the CSV files with the repective table names.
 """
-
+#imports csv and sqlite3 to be used in auditing
 import csv, sqlite3
 
 con = sqlite3.connect("manas_DB.db")
@@ -16,7 +16,7 @@ with open('nodes.csv','rb') as fin:
              for i in dr]
 
 cur.executemany("INSERT INTO nodes (id, lat, lon, user, uid, version, changeset, timestamp) \
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?);", to_db)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?);", to_db)#sorts all the values by the appropriate category
 con.commit()
 
 #create nodes_tags table
@@ -25,7 +25,7 @@ with open('nodes_tags.csv','rb') as fin:
     dr = csv.DictReader(fin) 
     to_db = [(i['id'], i['key'], i['value'], i['type']) for i in dr]
 
-cur.executemany("INSERT INTO nodes_tags (id, key, value, type) VALUES (?, ?, ?, ?);", to_db)
+cur.executemany("INSERT INTO nodes_tags (id, key, value, type) VALUES (?, ?, ?, ?);", to_db)#sorts all the values by the appropriate category
 con.commit()
 
 #Create ways table
