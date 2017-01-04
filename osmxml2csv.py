@@ -12,36 +12,42 @@ Rules:
 * If the tag "k" value contains a ":" the characters before the ":" should be set as the tag type
   and characters after the ":" should be set as the tag key"""
   
-  
+#imports the libraries necessary to convert the osm to a csv
 import csv
 import codecs
 import re
 import xml.etree.cElementTree as ET
 from unittest import TestCase
 
+#imports libraries to analyze the dataset
 import cerberus
 import schema
 
+#original osm file
 OSM_PATH = "/Users/mnsarma/xml/toronto_canada.osm"
 
+#assigns variables to the individual csv files that are to be created
 NODES_PATH = "nodes.csv"
 NODE_TAGS_PATH = "nodes_tags.csv"
 WAYS_PATH = "ways.csv"
 WAY_NODES_PATH = "ways_nodes.csv"
 WAY_TAGS_PATH = "ways_tags.csv"
 
+#special characters that are to be ignored during the auditing process
 LOWER_COLON = re.compile(r'^([a-z]|_)+:([a-z]|_)+')
 PROBLEMCHARS = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 
+#assigns a variable to the schema file that is to be created
 SCHEMA = schema.schema
 
+#creates dictionaries of the different types of values in each csv
 NODE_FIELDS = ['id', 'lat', 'lon', 'user', 'uid', 'version', 'changeset', 'timestamp']
 NODE_TAGS_FIELDS = ['id', 'key', 'value', 'type']
 WAY_FIELDS = ['id', 'user', 'uid', 'version', 'changeset', 'timestamp']
 WAY_TAGS_FIELDS = ['id', 'key', 'value', 'type']
 WAY_NODES_FIELDS = ['id', 'node_id', 'position']
 
-
+#shapes the values into dictionaries
 def shape_element(element, node_attr_fields=NODE_FIELDS, way_attr_fields=WAY_FIELDS,
                   problem_chars=PROBLEMCHARS, default_tag_type='regular'):
     """Clean and shape node or way XML element to Python dict"""
